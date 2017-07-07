@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import ProductList from './ProductList';
 import CartSummary from './CartSummary';
-import Checkout from '../supermarket_checkout/src/Checkout';
+import Checkout from '../supermarket_checkout/dist/Checkout';
 import catalogData from '../catalogData';
 
 class App extends Component {
