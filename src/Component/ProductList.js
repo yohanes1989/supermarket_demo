@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 import Product from './Product';
-import { addToCart } from '../action';
+import { addToCart } from '../actions';
 
 class ProductList extends Component {
   renderProduct({ sku, price }) {
@@ -9,7 +10,7 @@ class ProductList extends Component {
       <div key={sku} className="col-xs-6 col-md-4">
         <div style={{ border: '1px solid #000', padding: '10px 20px' }} className="text-center">
           <Product sku={sku} price={price} />
-          <button onClick={ () => this.props.onAddToCart(sku) } className="btn btn-primary">
+          <button onClick={ () => this.props.addToCart(sku) } className="btn btn-primary">
             <i className="glyphicon glyphicon-shopping-cart"></i>
           </button>
         </div>
@@ -28,4 +29,16 @@ class ProductList extends Component {
   }
 }
 
-export default ProductList;
+const mapStateToProps = (state, ownProps) => {
+  const productsArray = [];
+
+  Object.keys(state.checkout.catalog).map((key) => {
+    productsArray.push(state.checkout.catalog[key]);
+  });
+
+  return {
+    products: productsArray
+  };
+};
+
+export default connect(mapStateToProps, { addToCart })(ProductList);

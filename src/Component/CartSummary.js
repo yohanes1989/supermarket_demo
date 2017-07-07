@@ -1,17 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
-const CartSummary = (props) => {
-  const { checkoutObject, cartItems, onRemoveLineItem, onQuantityIncrease, onQuantityDecrease } = props;
+import { addToCart, removeFromCart, decreaseProduct } from '../actions';
 
-  if (cartItems.length == 0) {
-    return (
-      <div style={{ margin: 0 }} className="text-center alert alert-warning">
-        No item added yet.
-      </div>
-    );
-  }
-
-  const renderPrice = (netPrice, originalPrice) => {
+class CartSummary extends Component {
+  renderPrice(netPrice, originalPrice) {
     if (netPrice == originalPrice) {
       return `\$${netPrice}`;
     } else {
@@ -19,7 +12,9 @@ const CartSummary = (props) => {
     }
   };
 
-  const renderLineItem = (cartItem, index) => {
+  renderLineItem(cartItem, index) {
+    const { checkoutObject, addToCart, decreaseProduct, removeFromCart } = this.props;
+
     const  { sku, quantity } = cartItem;
     const product = checkoutObject.getProduct(cartItem.sku);
 
@@ -30,18 +25,18 @@ const CartSummary = (props) => {
         <td>
           {quantity + ' '}
           <div className="btn-group btn-group-xs">
-            <button onClick={() => onQuantityIncrease(sku)} className="btn btn-default">
+            <button onClick={() => addToCart(sku)} className="btn btn-default">
               <i className="glyphicon glyphicon-plus"></i>
             </button>
 
-            <button onClick={() => onQuantityDecrease(sku)} className="btn btn-default">
+            <button onClick={() => decreaseProduct(sku)} className="btn btn-default">
               <i className="glyphicon glyphicon-minus"></i>
             </button>
           </div>
         </td>
-        <td dangerouslySetInnerHTML={{__html: renderPrice(checkoutObject.calculateLineItem(cartItem), product.price * quantity) }} />
+        <td dangerouslySetInnerHTML={{__html: this.renderPrice(checkoutObject.calculateLineItem(cartItem), product.price * quantity) }} />
         <td>
-          <button onClick={() => onRemoveLineItem(sku)} className="btn btn-xs btn-danger">
+          <button onClick={() => removeFromCart(sku)} className="btn btn-xs btn-danger">
             <i className="glyphicon glyphicon-remove"></i>
           </button>
         </td>
@@ -49,28 +44,47 @@ const CartSummary = (props) => {
     );
   };
 
-  return (
-    <div>
-      <table className="table">
-        <thead>
-          <tr>
-            <th>SKU</th>
-            <th>Price</th>
-            <th>Quantity</th>
-            <th>Total</th>
-            <th></th>
-          </tr>
-        </thead>
+  render() {
+    const { cartItems, checkoutObject } = this.props;
 
-        <tbody>
-        {cartItems.map(renderLineItem)}
-        </tbody>
-      </table>
-      <div style={{ margin: 0, fontSize: 18 }} className="text-center alert alert-success">
-        <strong>${checkoutObject.calculateTotal()}</strong>
+    if (cartItems.length == 0) {
+      return (
+        <div style={{ margin: 0 }} className="text-center alert alert-warning">
+          No item added yet.
+        </div>
+      );
+    }
+
+    return (
+      <div>
+        <table className="table">
+          <thead>
+            <tr>
+              <th>SKU</th>
+              <th>Price</th>
+              <th>Quantity</th>
+              <th>Total</th>
+              <th></th>
+            </tr>
+          </thead>
+
+          <tbody>
+          {cartItems.map(this.renderLineItem.bind(this))}
+          </tbody>
+        </table>
+        <div style={{ margin: 0, fontSize: 18 }} className="text-center alert alert-success">
+          <strong>${checkoutObject.calculateTotal()}</strong>
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
 }
 
-export default CartSummary;
+const mapStateToProps = (state) => {
+  return {
+    checkoutObject: state.checkout.checkoutObject,
+    cartItems: state.checkout.cartItems
+  };
+};
+
+export default connect(mapStateToProps, { addToCart, removeFromCart, decreaseProduct })(CartSummary);
