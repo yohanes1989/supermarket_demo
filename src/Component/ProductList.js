@@ -2,9 +2,13 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import Product from './Product';
-import { addToCart } from '../actions';
+import { addToCart, fetchCatalog } from '../actions';
 
 class ProductList extends Component {
+  componentWillMount() {
+    this.props.fetchCatalog();
+  }
+
   renderProduct({ sku, price }) {
     return (
       <div key={sku} className="col-xs-6 col-md-4">
@@ -23,6 +27,8 @@ class ProductList extends Component {
 
     if (products.length > 0) {
       return <div className="row">{ products.map(this.renderProduct.bind(this)) }</div>;
+    } else {
+      return <div className="text-center">Loading products...</div>;
     }
 
     return null;
@@ -30,15 +36,9 @@ class ProductList extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  const productsArray = [];
-
-  Object.keys(state.checkout.catalog).map((key) => {
-    productsArray.push(state.checkout.catalog[key]);
-  });
-
   return {
-    products: productsArray
+    products: state.checkout.products
   };
 };
 
-export default connect(mapStateToProps, { addToCart })(ProductList);
+export default connect(mapStateToProps, { addToCart, fetchCatalog })(ProductList);

@@ -1,8 +1,11 @@
+const webpack = require('webpack');
+
 module.exports = options => {
   return {
     entry: './src/index.js',
     output: {
-      filename: './js/bundle.js'
+      filename: './js/bundle.js',
+      publicPath: '/'
     },
     module: {
       rules: [
@@ -10,7 +13,8 @@ module.exports = options => {
           test: /\.js$/,
           exclude: [
             __dirname + '/node_modules',
-            __dirname + '/src/supermarket_checkout'
+            __dirname + '/src/supermarket_checkout',
+            __dirname + '/supermarket_catalog'
           ],
           use: [
             {
@@ -22,6 +26,15 @@ module.exports = options => {
           ]
         }
       ]
+    },
+    plugins: [
+      new webpack.optimize.UglifyJsPlugin({
+        compress: process.env.NODE_ENV === 'production'
+      })
+    ],
+    devServer: {
+      historyApiFallback: true,
+      contentBase: './'
     }
   };
 }

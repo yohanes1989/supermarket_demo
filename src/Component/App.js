@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 import ProductList from './ProductList';
 import CartSummary from './CartSummary';
-import Checkout from '../supermarket_checkout/dist/Checkout';
-import catalogData from '../catalogData';
 
 class App extends Component {
   render() {
@@ -13,7 +12,12 @@ class App extends Component {
           <div className="row">
             <div className="col-md-8">
               <div className="panel panel-default">
-                <div className="panel-heading">Products</div>
+                <div className="panel-heading">
+                  Products
+                  <div className="pull-right">
+                    <Link className="btn btn-xs btn-default" to="/catalog-form">Edit Catalog</Link>
+                  </div>
+                </div>
                 <div className="panel-body">
                   <ProductList />
                 </div>

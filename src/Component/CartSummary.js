@@ -45,7 +45,7 @@ class CartSummary extends Component {
   };
 
   render() {
-    const { cartItems, checkoutObject } = this.props;
+    const { cartItems, checkoutObject, cartTotal } = this.props;
 
     if (cartItems.length == 0) {
       return (
@@ -73,7 +73,7 @@ class CartSummary extends Component {
           </tbody>
         </table>
         <div style={{ margin: 0, fontSize: 18 }} className="text-center alert alert-success">
-          <strong>${checkoutObject.calculateTotal()}</strong>
+          <strong>${cartTotal}</strong>
         </div>
       </div>
     );
@@ -83,7 +83,8 @@ class CartSummary extends Component {
 const mapStateToProps = (state) => {
   return {
     checkoutObject: state.checkout.checkoutObject,
-    cartItems: state.checkout.cartItems
+    cartItems: state.checkout.cartItems,
+    cartTotal: state.checkout.cartTotal
   };
 };
 
