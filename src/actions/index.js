@@ -7,7 +7,7 @@ export const ACTION_DECREASE_PRODUCT = 'decrease_product';
 let CATALOG_API_PATH = 'http://localhost:3000/api';
 
 if (process.env.NODE_ENV === 'production') {
-  CATALOG_API_PATH = 'http://webpresso.co.id/supermarket_demo_catalog/api';
+  CATALOG_API_PATH = 'http://nodejs.webpresso.co.id/supermarket_demo_catalog/api';
 }
 
 export const fetchCatalog = (onCompleteCallback) => {
