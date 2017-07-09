@@ -4,8 +4,8 @@
   "description": "React app to demo Checkout object",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack-dev-server --env.dev",
-    "build": "cross-env NODE_ENV=production webpack"
+    "dev": "webpack-dev-server --env=dev",
+    "build": "webpack --env=prod"
   },
   "author": "Yohanes",
   "license": "ISC",

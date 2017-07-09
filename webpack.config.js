@@ -1,6 +1,6 @@
 const webpack = require('webpack');
 
-module.exports = options => {
+module.exports = env => {
   return {
     entry: './src/index.js',
     output: {
@@ -28,6 +28,11 @@ module.exports = options => {
       ]
     },
     plugins: [
+      new webpack.DefinePlugin({
+        'process.env': {
+          NODE_ENV: JSON.stringify(env === 'prod'?'production':'development')
+        }
+      }),
       new webpack.optimize.UglifyJsPlugin({
         compress: process.env.NODE_ENV === 'production'
       })
